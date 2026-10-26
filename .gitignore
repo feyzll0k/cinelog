@@ -1,1 +1,24 @@
+# Ortam ve Gizli Değişkenler (Kesinlikle gitmemeli)
+.env
+.env.local
+
+# Sanal Ortamlar
 .venv/
+venv/
+env/
+
+# Python derleme ve önbellek dosyaları
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# İşletim sistemi ve IDE dosyaları
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Flask geçici dosyaları
+instance/

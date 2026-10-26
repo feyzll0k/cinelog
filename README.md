@@ -21,7 +21,7 @@ Yazılım Mühendisliği dersi dönem projesi (2026/27 Güz).
 1. Repoyu klonla ve klasöre gir:
    ```bash
    git clone https://github.com/feyzll0k/cinelog.git
-   cd REPO
+   cd cinelog
    ```
 2. Sanal ortam oluştur ve etkinleştir:
    - Mac/Linux: `python3 -m venv .venv` ve `source .venv/bin/activate`
