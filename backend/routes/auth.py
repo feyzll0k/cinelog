@@ -41,7 +41,7 @@ def register():
     if len(password) < 8:
         return jsonify({"error": "Şifre en az 8 karakter olmalıdır."}), 400
 
-    password_hash = generate_password_hash(password)
+    password_hash = generate_password_hash(password, method="pbkdf2:sha256")
 
     try:
         with get_db_cursor(commit=True) as cursor:
