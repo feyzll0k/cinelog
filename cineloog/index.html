@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLog - Film Keşfetme ve İnceleme Platformu</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Harici CSS Dosyası -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ortak Üst Menü -->
+    <header>
+        <a class="logo" onclick="showScreen('screen-search')">CineLog</a>
+        <input type="text" class="search-bar" placeholder="Film, yönetmen veya oyuncu ara..." onkeydown="if(event.key === 'Enter') showScreen('screen-search')">
+        <div class="nav-links">
+            <a onclick="showScreen('screen-search')">Keşfet</a>
+            <a class="btn" onclick="showScreen('screen-login')">Giriş Yap</a>
+        </div>
+    </header>
+
+    <!-- Test Sekmeleri -->
+    <div class="screen-tabs">
+        <button class="tab-btn active" onclick="showScreen('screen-register')">1. Kayıt Ekranı</button>
+        <button class="tab-btn" onclick="showScreen('screen-login')">2. Giriş Ekranı</button>
+        <button class="tab-btn" onclick="showScreen('screen-search')">3. Arama Sonuçları</button>
+        <button class="tab-btn" onclick="showScreen('screen-detail')">4. Film Detay</button>
+        <button class="tab-btn" onclick="showScreen('screen-profile')">5. Profil Ekranı</button>
+    </div>
+
+    <main>
+        <!-- 1. KAYIT EKRANI -->
+        <div id="screen-register" class="screen-container active">
+            <div class="card">
+                <h2>Kayıt Ol</h2>
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" placeholder="Kullanıcı adınızı girin">
+                </div>
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="email" value="bilal@ornek.com">
+                    <span class="error-msg">Bu e-posta zaten kullanılıyor.</span>
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <button class="btn-primary" onclick="showScreen('screen-login')">Kayıt Ol</button>
+                <div class="form-link">
+                    Zaten hesabın var mı? <a onclick="showScreen('screen-login')">Giriş yap</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. GİRİŞ EKRANI -->
+        <div id="screen-login" class="screen-container">
+            <div class="card">
+                <h2>Giriş Yap</h2>
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="email" placeholder="ornek@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" placeholder="••••••••">
+                    <span class="error-msg">Geçersiz e-posta veya şifre.</span>
+                </div>
+                <button class="btn-primary" onclick="showScreen('screen-search')">Giriş Yap</button>
+                <div class="form-link">
+                    Hesabın yok mu? <a onclick="showScreen('screen-register')">Kayıt ol</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. ARAMA SONUÇLARI EKRANI -->
+        <div id="screen-search" class="screen-container">
+            <h2>"Interstellar" Arama Sonuçları</h2>
+            <div class="movie-grid">
+                <div class="movie-card" onclick="showScreen('screen-detail')">
+                    <div class="movie-poster">Interstellar Afis</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Interstellar</div>
+                        <div class="movie-year">2014 • Sci-Fi / Drama</div>
+                    </div>
+                </div>
+                <div class="movie-card" onclick="showScreen('screen-detail')">
+                    <div class="movie-poster">Inception Afis</div>
+                    <div class="movie-info">
+                        <div class="movie-title">Inception</div>
+                        <div class="movie-year">2010 • Action / Sci-Fi</div>
+                    </div>
+                </div>
+                <div class="movie-card" onclick="showScreen('screen-detail')">
+                    <div class="movie-poster">The Martian Afis</div>
+                    <div class="movie-info">
+                        <div class="movie-title">The Martian</div>
+                        <div class="movie-year">2015 • Adventure</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. FİLM DETAY EKRANI -->
+        <div id="screen-detail" class="screen-container">
+            <div class="detail-layout">
+                <div class="detail-poster">Film Afişi</div>
+                <div class="detail-content">
+                    <h1>Interstellar (Yıldızlararası)</h1>
+                    <p style="color: var(--text-muted);">Orijinal Adı: Interstellar | 2014 • 2s 49dk</p>
+                    <div class="meta-tags">
+                        <span class="tag">Bilimkurgu</span>
+                        <span class="tag">Macera</span>
+                        <span class="tag">Dram</span>
+                    </div>
+                    <p style="line-height: 1.6; margin-bottom: 1rem;">Dünya'nın ömrü tükenirken bir grup astronot, insanlık için yeni bir yuva bulmak adına solucandeliğinden geçerek galaksiler arası bir yolculuğa çıkar.</p>
+                    <p><strong>Yönetmen:</strong> Christopher Nolan</p>
+                    
+                    <div class="rating-box">
+                        <div style="font-size: 0.9rem; color: var(--text-muted);">Ortalama Puan: <strong>8.6/10</strong> (1.4M Oy)</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem;">Senin Puanın:</div>
+                        <div class="stars">★★★★☆</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. PROFİL EKRANI -->
+        <div id="screen-profile" class="screen-container">
+            <div class="profile-header">
+                <div class="avatar">BH</div>
+                <div>
+                    <h2>Bilal Hoser</h2>
+                    <p style="color: var(--text-muted);">Üyelik Tarihi: Kasım 2026 | Aktif Üye</p>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem;">Verdiğin Puanlar ve İncelemeler</h3>
+            <div class="review-list">
+                <div class="review-item">
+                    <span><strong>Interstellar</strong> - Harika bir filmdi, müzikleri efsane!</span>
+                    <span style="color: var(--accent);">⭐ 9/10</span>
+                </div>
+                <div class="review-item">
+                    <span><strong>Inception</strong> - Kurgusu kafa açıcı ve sürükleyici.</span>
+                    <span style="color: var(--accent);">⭐ 8/10</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Zorunlu TMDB Atıf Metni -->
+    <footer>
+        <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+        <p style="margin-top: 0.5rem;">© 2026 CineLog - İstanbul Atlas Üniversitesi Yazılım Mühendisliği Projesi</p>
+    </footer>
+
+    <!-- Harici JavaScript Dosyası -->
+    <script src="script.js"></script>
+</body>
+</html>
