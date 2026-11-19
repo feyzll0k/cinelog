@@ -1,5 +1,171 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head><meta charset="UTF-8"><title>Film Platformu</title></head>
-<body><h1>Film Platformu</h1></body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineLog — Film Keşif & İnceleme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-inner">
+            <a class="brand" href="#" onclick="event.preventDefault(); setDiscoverMode('popular'); switchView('discover');">
+                <span class="brand-dot"></span>
+                <span>CineLog</span>
+            </a>
+
+            <form class="search-box" onsubmit="handleSearch(event)">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="global-search-input" placeholder="Film ara (ör. Inception, Matrix)...">
+                <button type="submit" class="search-submit">Ara</button>
+            </form>
+
+            <nav class="nav-links">
+                <button class="nav-btn active" data-view="discover" onclick="switchView('discover')">Keşfet</button>
+                <button class="nav-btn" data-view="feed" onclick="switchView('feed')">Akış</button>
+                <button class="nav-btn" data-view="lists" onclick="switchView('lists')">Listelerim</button>
+                <button class="nav-btn" data-view="profile" onclick="switchView('profile')">Profil</button>
+            </nav>
+
+            <div class="auth-area" id="auth-area">
+                <button class="btn-primary" onclick="openAuthModal('login')">Giriş Yap</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- KEŞFET / ARAMA -->
+        <section id="view-discover" class="view-section active">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Keşfet</h1>
+                    <p class="section-subtitle" id="discover-subtitle">TMDB üzerinde şu an en çok ilgi gören filmler</p>
+                </div>
+                <div class="segmented" id="discover-tabs">
+                    <button class="seg-btn active" data-mode="popular" onclick="setDiscoverMode('popular')">Popüler</button>
+                    <button class="seg-btn" data-mode="top-rated" onclick="setDiscoverMode('top-rated')">En İyiler</button>
+                </div>
+            </div>
+
+            <div class="movie-grid" id="discover-grid"></div>
+
+            <div class="pagination">
+                <button class="btn-secondary" id="prev-page-btn" onclick="changePage(-1)">← Önceki</button>
+                <span id="page-indicator" style="font-size:0.86rem; color:var(--text-muted);">Sayfa 1</span>
+                <button class="btn-secondary" id="next-page-btn" onclick="changePage(1)">Sonraki →</button>
+            </div>
+        </section>
+
+        <!-- AKIŞ -->
+        <section id="view-feed" class="view-section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Sosyal Akış</h1>
+                    <p class="section-subtitle">Takip ettiğiniz sinemaseverlerin son puanları, incelemeleri ve listeleri</p>
+                </div>
+            </div>
+            <div id="feed-content"></div>
+        </section>
+
+        <!-- LİSTELERİM -->
+        <section id="view-lists" class="view-section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Listelerim</h1>
+                    <p class="section-subtitle">İzleme listeniz ve özel film koleksiyonlarınız</p>
+                </div>
+            </div>
+
+            <form id="new-list-form" class="panel" onsubmit="createCustomList(event)" style="margin-bottom:2rem;">
+                <h3 style="font-size:1rem; margin-bottom:1rem; color:var(--white);">Yeni Özel Liste Oluştur</h3>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:0.85rem; align-items:end;">
+                    <div class="form-group" style="margin:0;">
+                        <label>Liste Adı</label>
+                        <input type="text" id="new-list-name" placeholder="Örn: Bilim Kurgu Klasikleri" required>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>Açıklama</label>
+                        <input type="text" id="new-list-desc" placeholder="Kısa not (opsiyonel)">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>Görünürlük</label>
+                        <select id="new-list-visibility">
+                            <option value="public">Herkese Açık</option>
+                            <option value="private">Özel</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Oluştur</button>
+                </div>
+            </form>
+
+            <div id="lists-content"></div>
+        </section>
+
+        <!-- PROFİL -->
+        <section id="view-profile" class="view-section">
+            <div class="section-header">
+                <div>
+                    <h1 class="section-title">Profil</h1>
+                    <p class="section-subtitle">Hesap bilgileriniz ve takip istatistikleriniz</p>
+                </div>
+            </div>
+            <div id="profile-content"></div>
+        </section>
+    </main>
+
+    <!-- AUTH MODAL -->
+    <div id="auth-modal" class="modal-backdrop" onclick="if(event.target === this) closeAuthModal()">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeAuthModal()">×</button>
+            <div class="segmented" style="margin-bottom:1.5rem;">
+                <button class="seg-btn active" id="tab-login" onclick="switchAuthTab('login')">Giriş Yap</button>
+                <button class="seg-btn" id="tab-register" onclick="switchAuthTab('register')">Kayıt Ol</button>
+            </div>
+
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Kullanıcı Adı veya E-posta</label>
+                    <input type="text" id="login-identifier" required placeholder="kullanici_adi">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="login-password" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%; margin-top:0.5rem;">Giriş Yap</button>
+            </form>
+
+            <form id="register-form" style="display:none;" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Kullanıcı Adı</label>
+                    <input type="text" id="reg-username" required placeholder="3-30 karakter (küçük harf, rakam, _)">
+                </div>
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="email" id="reg-email" required placeholder="ornek@mail.com">
+                </div>
+                <div class="form-group">
+                    <label>Şifre</label>
+                    <input type="password" id="reg-password" required minlength="8" placeholder="En az 8 karakter">
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%; margin-top:0.5rem;">Hesap Oluştur</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FILM DETAIL / LIST DETAIL MODAL -->
+    <div id="detail-modal" class="modal-backdrop" onclick="if(event.target === this) closeDetailModal()">
+        <div class="modal-card wide">
+            <button class="modal-close" onclick="closeDetailModal()">×</button>
+            <div id="detail-modal-body"></div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
 </html>
